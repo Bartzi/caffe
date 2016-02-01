@@ -374,6 +374,7 @@ message LayerParameter {
   optional InnerProductParameter inner_product_param = 117;
   optional LogParameter log_param = 134;
   optional LRNParameter lrn_param = 118;
+  optional LstmParameter lstm_param = 201;
   optional MemoryDataParameter memory_data_param = 119;
   optional MVNParameter mvn_param = 120;
   optional PoolingParameter pooling_param = 121;
@@ -428,7 +429,7 @@ message LossParameter {
     // Outputs that receive the ignore label will NOT be ignored in computing
     // the normalization factor.
     FULL = 0;
-    // Divide by the total number of output locations that do not take the 
+    // Divide by the total number of output locations that do not take the
     // ignore_label.  If ignore_label is not set, this behaves like FULL.
     VALID = 1;
     // Divide by the batch size.
@@ -560,6 +561,15 @@ message ConvolutionParameter {
   // implementation; for input blobs with num_axes != 2, this option is
   // ignored and the ND implementation will be used.)
   optional bool force_nd_im2col = 17 [default = false];
+}
+
+message LstmParameter {
+  optional uint32 num_cells = 1;
+  optional FillerParameter input_weight_filler = 2; // The filler for the weight
+  optional FillerParameter input_gate_weight_filler = 3; // The filler for the weight
+  optional FillerParameter forget_gate_weight_filler = 4; // The filler for the weight
+  optional FillerParameter output_gate_weight_filler = 5; // The filler for the weight
+  optional bool tanh_hidden = 7 [default=true];
 }
 
 message DataParameter {
