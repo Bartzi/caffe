@@ -428,7 +428,7 @@ message LossParameter {
     // Outputs that receive the ignore label will NOT be ignored in computing
     // the normalization factor.
     FULL = 0;
-    // Divide by the total number of output locations that do not take the 
+    // Divide by the total number of output locations that do not take the
     // ignore_label.  If ignore_label is not set, this behaves like FULL.
     VALID = 1;
     // Divide by the batch size.
