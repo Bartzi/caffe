@@ -85,4 +85,4 @@ class MultiClassAccuracyLayer : public Layer<Dtype> {
 
 }  // namespace caffe
 
-#endif // MULTI_CLASS_ACCURACY_LAYER_HPP
+#endif  // MULTI_CLASS_ACCURACY_LAYER_HPP

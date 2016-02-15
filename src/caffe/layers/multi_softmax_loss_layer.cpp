@@ -15,18 +15,19 @@ void MultiSoftmaxWithLossLayer<Dtype>::LayerSetUp(
   softmax_axis_ =
       bottom[0]->CanonicalAxisIndex(this->layer_param_.softmax_param().axis());
 
-  CHECK_EQ(bottom[0]->shape(softmax_axis_) % bottom[1]->shape(softmax_axis_), 0)
-          <<  "number of predictions must be a multiple of labels!";
+  CHECK_EQ(
+      bottom[0]->shape(softmax_axis_) % bottom[1]->shape(softmax_axis_),
+      0) <<  "number of predictions must be a multiple of labels!";
 
-  num_classes_ = bottom[0]->shape(softmax_axis_) / bottom[1]->shape(softmax_axis_);
+  num_classes_ =
+          bottom[0]->shape(softmax_axis_) / bottom[1]->shape(softmax_axis_);
   num_classifiers_ = bottom[0]->shape(softmax_axis_) / num_classes_;
 
   single_softmax_bottom.Reshape(
           bottom[0]->num() * num_classifiers_,
           num_classes_,
           1,
-          1
-  );
+          1);
 
   // prepare softmax layer contained in this layer
   LayerParameter softmax_param(this->layer_param_);
@@ -37,7 +38,6 @@ void MultiSoftmaxWithLossLayer<Dtype>::LayerSetUp(
   softmax_top_vec_.clear();
   softmax_top_vec_.push_back(&prob_);
   softmax_layer_->SetUp(softmax_bottom_vec_, softmax_top_vec_);
-
 }
 
 template <typename Dtype>
@@ -49,8 +49,7 @@ void MultiSoftmaxWithLossLayer<Dtype>::Reshape(
           bottom[0]->num() * num_classifiers_,
           num_classes_,
           1,
-          1
-  );
+          1);
 
   softmax_layer_->Reshape(softmax_bottom_vec_, softmax_top_vec_);
 
@@ -71,7 +70,7 @@ void MultiSoftmaxWithLossLayer<Dtype>::Forward_cpu(
   caffe_copy(
       single_softmax_bottom.count(),
       bottom[0]->cpu_data(),
-      single_softmax_bottom_data );
+      single_softmax_bottom_data);
 
   // do softmax per classifier
   softmax_layer_->Forward(softmax_bottom_vec_, softmax_top_vec_);
@@ -89,8 +88,10 @@ void MultiSoftmaxWithLossLayer<Dtype>::Forward_cpu(
 }
 
 template <typename Dtype>
-void MultiSoftmaxWithLossLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
-    const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
+void MultiSoftmaxWithLossLayer<Dtype>::Backward_cpu(
+    const vector<Blob<Dtype>*>& top,
+    const vector<bool>& propagate_down,
+    const vector<Blob<Dtype>*>& bottom) {
   if (propagate_down[1]) {
     LOG(FATAL) << this->type()
                << " Layer cannot backpropagate to label inputs.";
@@ -109,8 +110,7 @@ void MultiSoftmaxWithLossLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& 
     caffe_copy(
         bottom[0]->count(),
         prob_data,
-        bottom_diff
-    );
+        bottom_diff);
 
     // scale with loss_weight
     Dtype loss_weight = top[0]->cpu_diff()[0] / bottom[0]->num();

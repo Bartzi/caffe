@@ -115,4 +115,4 @@ class MultiSoftmaxWithLossLayer : public LossLayer<Dtype> {
 
 }  // namespace caffe
 
-#endif // MULTI_SOFTMAX_WITH_LOSS_LAYER_HPP
+#endif  // MULTI_SOFTMAX_WITH_LOSS_LAYER_HPP

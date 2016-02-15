@@ -45,7 +45,8 @@ class MultiClassAccuracyLayerTest : public CPUDeviceTest<Dtype> {
           static_cast<caffe::rng_t*>(rng->generator());
     Dtype* label_data = blob_bottom_label_->mutable_cpu_data();
     for (int i = 0; i < blob_bottom_label_->count(); ++i) {
-      label_data[i] = (*prefetch_rng)() % (blob_bottom_data_->channels() / blob_bottom_label_->channels());
+      label_data[i] = (*prefetch_rng)() %
+              (blob_bottom_data_->channels() / blob_bottom_label_->channels());
     }
   }
 
@@ -133,7 +134,11 @@ TYPED_TEST(MultiClassAccuracyLayerTest, TestForwardCPUMultipleClassifiers) {
       max_value = -FLT_MAX;
       max_id = 0;
       for (int j = 0; j < 2; ++j) {
-        TypeParam value = this->blob_bottom_data_->data_at(i, classifier_id * 2 + j, 0, 0);
+        TypeParam value = this->blob_bottom_data_->data_at(
+                    i,
+                    classifier_id * 2 + j,
+                    0,
+                    0);
         if (value > max_value) {
           max_value = value;
           max_id = j;
@@ -145,7 +150,9 @@ TYPED_TEST(MultiClassAccuracyLayerTest, TestForwardCPUMultipleClassifiers) {
     }
   }
 
-  for (int prediction_id = 0; prediction_id < correct_predictions.size(); ++prediction_id) {
+  for (int prediction_id = 0;
+       prediction_id < correct_predictions.size();
+       ++prediction_id) {
       EXPECT_NEAR(this->blob_top_->data_at(prediction_id, 0, 0, 0),
           correct_predictions[prediction_id] / 100.0, 1e-4);
   }
